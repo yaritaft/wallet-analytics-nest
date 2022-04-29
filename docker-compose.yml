@@ -1,6 +1,16 @@
 version: '3.3'
 
 services:
+  node:
+    build: .
+    command: >
+      sh -c "npm run start:debug"
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./:/app
+    depends_on:
+      - db
   db:
     restart: unless-stopped
     image: postgres:11.4-alpine
@@ -11,4 +21,4 @@ services:
       POSTGRES_PASSWORD: 123456789
       POSTGRES_DB: mydatabase
     volumes:
-      - ./data:/var/lib/postgresql/data
+      - ../data:/var/lib/postgresql/data

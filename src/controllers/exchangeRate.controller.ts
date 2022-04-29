@@ -18,6 +18,11 @@ export class ExchangeRateController {
     return await this.exchangeRateService.getExchangeRate(headers.token);
   }
 
+  @Get('/hello')
+  hello(): string {
+    return 'hello2';
+  }
+
   @Patch('/exchange-rates')
   async updateExchangeRate(
     @Headers() headers: Token,
