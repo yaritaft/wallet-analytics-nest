@@ -30,4 +30,4 @@ Use redux/vuex if necessary. Please note: You can add things to the design if re
 
 ### UI Design
 
-![](https://raw.githubusercontent.com/yaritaft/wallet-analytics-nest/master/doc/ui-design.png)
+![](https://raw.githubusercontent.com/yaritaft/wallet-analytics-nest/master/doc/ui-design2.png)
