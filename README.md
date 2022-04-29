@@ -29,3 +29,5 @@ Implement for above endpoints a dashboard interface (React / VueJs) using the at
 Use redux/vuex if necessary. Please note: You can add things to the design if required.
 
 ### UI Design
+
+![](https://raw.githubusercontent.com/yaritaft/wallet-analytics-nest/master/doc/ui-design.png)
