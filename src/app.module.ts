@@ -1,10 +1,14 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ExchangeRate } from './entities/exchangeRate.entity';
 import { User } from './entities/user.entity';
 import { Wallet } from './entities/wallet.entity';
+import { ExchangeRateController } from './controllers/exchangeRate.controller';
+import { UserController } from './controllers/user.controller';
+import { WalletController } from './controllers/wallet.controller';
+import { ExchangeRateService } from './services/exchangeRate.service';
+import { UserService } from './services/user.service';
+import { WalletService } from './services/wallet.service';
 
 const rootDir = __dirname;
 
@@ -24,7 +28,7 @@ const rootDir = __dirname;
     }),
     TypeOrmModule.forFeature([ExchangeRate, User, Wallet]),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [WalletController, UserController, ExchangeRateController],
+  providers: [WalletService, UserService, ExchangeRateService],
 })
 export class AppModule {}
