@@ -5,9 +5,9 @@ export class ExchangeRate {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'float8' })
   ETHToUSD: number;
 
-  @Column()
+  @Column({ type: 'float8' })
   ETHToEuro: number;
 }

@@ -1,11 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { getEtherBalances } from 'src/externalAPIs/etherscan';
 import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
 import { Wallet } from '../entities/wallet.entity';
+import { ExchangeRateService } from './exchangeRate.service';
+import { ETHBalance } from '../externalAPIs/etherscan';
 
 export interface Wallets {
-  wallets: Wallet[];
+  wallets: WalletResponse[];
+}
+
+export interface WalletResponse extends ETHBalance {
+  euroBalance: number;
+  dolarBalance: number;
 }
 
 export interface ExchangeRatePayload {
@@ -47,14 +55,24 @@ export class WalletService {
     private userRepository: Repository<User>,
     @InjectRepository(Wallet)
     private walletRepository: Repository<Wallet>,
+    @Inject(ExchangeRateService)
+    private readonly exchangeRateService: ExchangeRateService,
   ) {}
 
   async getWallets(token: string): Promise<Wallets> {
     validateToken(token);
     const user = await this.userRepository.findOne({ token });
     validateUser(user);
-    const wallets = await this.walletRepository.find({ user });
-    return { wallets };
+    const rawWallets = await this.walletRepository.find({ user });
+    const updatedWallets = await getEtherBalances(rawWallets);
+    const exchangeRate = await this.exchangeRateService.getExchangeRate(token);
+    const convertedUpdatedWallets = updatedWallets.map((wallet) => ({
+      ...wallet,
+      euroBalance: Number(wallet.balance) * exchangeRate.ETHToEuro,
+      dolarBalance: Number(wallet.balance) * exchangeRate.ETHToUSD,
+    }));
+
+    return { wallets: convertedUpdatedWallets };
   }
 
   async storeWallet(token: string, address: string): Promise<void> {
