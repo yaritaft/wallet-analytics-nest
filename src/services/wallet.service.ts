@@ -78,8 +78,8 @@ export class WalletService {
   async storeWallet(token: string, address: string): Promise<void> {
     validateToken(token);
     const user = await this.userRepository.findOne({ token });
-    await this.walletRepository.save({ address, user, favorite: false });
     validateUser(user);
+    await this.walletRepository.save({ address, user, favorite: false });
   }
 
   async setFavoriteWallet(token: string, address: string): Promise<void> {
