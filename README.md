@@ -31,3 +31,74 @@ Use redux/vuex if necessary. Please note: You can add things to the design if re
 ### UI Design
 
 ![](https://raw.githubusercontent.com/yaritaft/wallet-analytics-nest/master/doc/ui-design2.png)
+
+# Solution
+
+## Technologies
+
+- NestJS
+- Typescript
+- TypeOrm
+- Postgres
+
+## Pre Requisites
+
+- Bash terminal
+- Docker and docker-compose installed and working without sudo
+
+## Run the app and db
+
+1. Create a .env file inside root folder. With following variables and of course using the real api key.
+
+```
+DATABASE_URL=postgresql://postgres:123456789@localhost:5432/mydatabase?sslmode=disable
+ETH_API_KEY=API_KEY_HERE
+ETH_API_URL=https://api.etherscan.io/api
+```
+
+Once that is done then run.
+
+```
+docker-compose up
+```
+
+## Run db and debug app
+
+```
+docker-compose up db
+```
+
+And press F5 in visual studio code. That will run the app in debug mode.
+
+## End to End Testing
+
+There's a Postman collection created in postman folder. It is possible to import it and test from that place the backend.
+
+## Assumptions
+
+- The sorting is first favorites wallets and then non favorite ones.
+- We need a register and log in module to support multiple accounts.
+- We are only getting exchange rate by manual input of the user. Although a default value is assigned when user is created.
+
+## Decisions
+
+- Postgres SQL and TypeORM: Since we have information that is related to multiple instances and SQL database was choosen. Also TypeORM was used because of it's integration with nest and because it is the most standard ORM technology. And also allows to use SQL database as a repository like mongo db.
+- Splitted logic in the architecture: We have core logic. Services. Controllers and entities. Every is fully injectable to allow easier unit test if it is needed.
+- External API calls was written in a different file to decoupple the code from the external api. We rely on interfaces and not in classes or implementations.
+- The whole application was dockerized for environment reproducibility purposes.
+
+## Improvement areas
+
+- A request layer would be useful to decoupple requests from axios.
+- Separated entities would be better instead of merging domain models with entities by using decorators.
+- It would be nice to have a mono repo to share domain models since we are using Typescript end to end.
+- JSON Schema validators could have been used to improve error handling related to invalid requests. I.E using Yup.
+- And extra security step of checking if the wallet exists before storing it in db.
+- Unit and integration testing to be able to test the app without postman. Using jest and supertest respectively.
+
+## How to use the postman collection
+
+1. Import the collection.
+2. Create your account.
+3. Login. Once you have the token store it in token env variable inside postman.
+4. Once you have that you are able to use all requests in the collection.
