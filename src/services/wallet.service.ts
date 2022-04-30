@@ -48,6 +48,12 @@ const validateWallet = (wallet: Wallet): void => {
   }
 };
 
+const sortWalletsByFavorite = (wallets: WalletResponse[]): void => {
+  const sortByTrueValue = (x: WalletResponse, y: WalletResponse) =>
+    x.favorite === y.favorite ? 0 : x.favorite ? -1 : 1;
+  wallets.sort(sortByTrueValue);
+};
+
 @Injectable()
 export class WalletService {
   constructor(
@@ -71,7 +77,7 @@ export class WalletService {
       euroBalance: Number(wallet.balance) * exchangeRate.ETHToEuro,
       dolarBalance: Number(wallet.balance) * exchangeRate.ETHToUSD,
     }));
-
+    sortWalletsByFavorite(convertedUpdatedWallets);
     return { wallets: convertedUpdatedWallets };
   }
 
@@ -88,7 +94,7 @@ export class WalletService {
     validateUser(user);
     const wallet = await this.walletRepository.findOne({ address, user });
     validateWallet(wallet);
-    this.walletRepository.save({ ...wallet, favorite: !wallet.favorite });
+    await this.walletRepository.save({ ...wallet, favorite: !wallet.favorite });
   }
 
   async deleteWallet(token, address: string): Promise<void> {
