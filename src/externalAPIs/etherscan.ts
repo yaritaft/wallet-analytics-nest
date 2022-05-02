@@ -35,7 +35,7 @@ const olderThanAYear = (timestamp: string): boolean => {
   return daysDiff > daysInAYear;
 };
 
-const classifyWallet = async (
+const classifyAndConvertBalanceWallet = async (
   ethBalance: Omit<ETHBalance, 'old' | 'address'>,
   oneTransaction: Transaction,
   walletsClassified: Partial<ETHBalance>[],
@@ -73,14 +73,19 @@ const checkWalletTransaction = async (wallet: string): Promise<Transaction> => {
   return response?.[0];
 };
 
-export const getOldWallets = async (
+export const getClassifiedWallets = async (
   ethBalances: Omit<ETHBalance, 'old' | 'address'>[],
   wallets: Wallet[],
 ): Promise<ETHBalance[]> => {
   const walletsClassified: ETHBalance[] = [];
   for (const ethBalance of ethBalances) {
     const firstTransaction = await checkWalletTransaction(ethBalance.account);
-    classifyWallet(ethBalance, firstTransaction, walletsClassified, wallets);
+    classifyAndConvertBalanceWallet(
+      ethBalance,
+      firstTransaction,
+      walletsClassified,
+      wallets,
+    );
   }
   return walletsClassified;
 };
@@ -95,11 +100,13 @@ export const getEtherBalances = async (
     return [];
   }
   const walletsString = wallets.map((wallet) => wallet.address).join(',');
+  const url = `${process.env.ETH_API_URL}?module=account&action=balancemulti&address=${walletsString}&tag=latest&apikey=${process.env.ETH_API_KEY}`;
   const response = await axios
-    .get<ETHBalances>(
-      `${process.env.ETH_API_URL}?module=account&action=balancemulti&address=${walletsString}&tag=latest&apikey=${process.env.ETH_API_KEY}`,
-    )
+    .get<ETHBalances>(url)
     .then((res) => res.data.result);
-  const ethBalances: ETHBalance[] = await getOldWallets(response, wallets);
+  const ethBalances: ETHBalance[] = await getClassifiedWallets(
+    response,
+    wallets,
+  );
   return ethBalances;
 };

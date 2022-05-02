@@ -4,7 +4,7 @@ services:
   node:
     build: .
     command: >
-      sh -c "npm run start:debug"
+      sh -c "npm run start"
     restart: unless-stopped
     network_mode: host
     volumes:

@@ -68,6 +68,12 @@ docker-compose up
 docker-compose up db
 ```
 
+In other terminal inside root folder and with Node 14 installed execute
+
+```
+npm install
+```
+
 And press F5 in visual studio code. That will run the app in debug mode.
 
 ## End to End Testing

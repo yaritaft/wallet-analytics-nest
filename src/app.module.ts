@@ -9,11 +9,13 @@ import { WalletController } from './controllers/wallet.controller';
 import { ExchangeRateService } from './services/exchangeRate.service';
 import { UserService } from './services/user.service';
 import { WalletService } from './services/wallet.service';
+import { ConfigModule } from '@nestjs/config';
 
 const rootDir = __dirname;
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       name: 'default',
       database: 'mydatabase',

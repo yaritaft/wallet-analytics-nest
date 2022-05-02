@@ -23,8 +23,8 @@ export class WalletController {
   constructor(private readonly walletService: WalletService) {}
 
   @Get('/wallets')
-  getWallets(@Headers() headers: Token): Promise<Wallets> {
-    return this.walletService.getWallets(headers.token);
+  async getWallets(@Headers() headers: Token): Promise<Wallets> {
+    return await this.walletService.getWallets(headers.token);
   }
 
   @Post('/wallets')
