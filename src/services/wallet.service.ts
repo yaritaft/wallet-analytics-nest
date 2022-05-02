@@ -1,11 +1,10 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { getEtherBalances } from 'src/externalAPIs/etherscan';
 import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
 import { Wallet } from '../entities/wallet.entity';
 import { ExchangeRateService } from './exchangeRate.service';
-import { ETHBalance } from '../externalAPIs/etherscan';
+import { ETHBalance, getEtherBalances } from '../externalAPIs/etherscan';
 import {
   validateToken,
   validateUser,

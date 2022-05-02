@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as moment from 'moment';
-import { fromTimestampToDate } from 'src/core/converter';
+import { fromTimestampToDate } from '../core/converter';
 import { Wallet } from 'src/entities/wallet.entity';
 import { fromWeiToETH } from '../core/converter';
 
