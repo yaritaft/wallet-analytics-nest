@@ -109,7 +109,6 @@ End to end tests will be run with supertest. Otherwise you there's a Postman col
 - Separated entities would be better instead of merging domain models with entities by using decorators.
 - It would be nice to have a mono repo to share domain models since we are using Typescript end to end.
 - JSON Schema validators could have been used to improve error handling related to invalid requests. I.E using Yup.
-- And extra security step of checking if the wallet exists before storing it in db.
 - Unit testing could have been used to test business logic in some complex cases.
 
 ## How to use the postman collection
