@@ -6,11 +6,12 @@ import { Connection, createConnection } from 'typeorm';
 import { User } from '../../src/entities/user.entity';
 import { ExchangeRate } from '../../src/entities/exchangeRate.entity';
 import { Wallet } from '../../src/entities/wallet.entity';
-import { clearDB, getConnection } from '../helper';
+import { clearDB, getConnection, printInTest } from '../helper';
 
-describe('WalletController (e2e)', () => {
+describe('ExchangeRateController (e2e)', () => {
   let app: INestApplication;
   let connection: Connection | void;
+  let token: string | undefined;
 
   afterEach(async () => {
     await clearDB(connection);
@@ -33,7 +34,7 @@ describe('WalletController (e2e)', () => {
     done();
   });
 
-  it('/api/login (Post)', async () => {
+  beforeEach(async () => {
     await request(app.getHttpServer())
       .post('/api/register')
       .send({ username: 'yari', password: '123' })
@@ -41,28 +42,29 @@ describe('WalletController (e2e)', () => {
     await request(app.getHttpServer())
       .post('/api/login')
       .send({ username: 'yari', password: '123' })
-      .expect(201);
+      .expect(201)
+      .expect((res) => {
+        printInTest(res, 201, true);
+        token = res.text;
+      });
+    expect(token.length).toBeGreaterThan(0);
   });
 
-  it('/api/register (Post)', async () => {
-    return await request(app.getHttpServer())
-      .post('/api/register')
-      .send({ username: 'yari', password: '123' })
-      .expect(201);
+  it('/api/exchange-rates (Get)', async () => {
+    await request(app.getHttpServer())
+      .get('/api/exchange-rates')
+      .set('token', token)
+      .expect(200);
   });
 
-  it('/api/logout (Patch)', async () => {
+  it('/api/exchange-rates (Patch)', async () => {
     await request(app.getHttpServer())
-      .post('/api/register')
-      .send({ username: 'yari', password: '123' })
-      .expect(201);
-    const res = await request(app.getHttpServer())
-      .post('/api/login')
-      .send({ username: 'yari', password: '123' })
-      .expect(201);
-    await request(app.getHttpServer())
-      .patch('/api/logout')
-      .set('token', res.text)
+      .patch('/api/exchange-rates')
+      .send({
+        ETHToUSD: 2,
+        ETHToEuro: 0.1,
+      })
+      .set('token', token)
       .expect(200);
   });
 });

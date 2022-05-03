@@ -1,3 +1,4 @@
+import * as request from 'supertest';
 import { Connection, createConnection } from 'typeorm';
 import { User } from '../src/entities/user.entity';
 import { ExchangeRate } from '../src/entities/exchangeRate.entity';
@@ -23,4 +24,14 @@ export const getConnection = async () => {
     ssl: process.env.DATABASE_URL ? true : false,
     entities: [User, ExchangeRate, Wallet],
   });
+};
+
+export const printInTest = (
+  res: request.Response,
+  statusCode: number,
+  error: boolean,
+) => {
+  if (error ? res.status !== statusCode : res.status === statusCode) {
+    console.log(JSON.stringify(res, null, 2));
+  }
 };
