@@ -78,7 +78,17 @@ And press F5 in visual studio code. That will run the app in debug mode.
 
 ## End to End Testing
 
-There's a Postman collection created in postman folder. It is possible to import it and test from that place the backend.
+```
+docker-compose up db
+```
+
+In other terminal inside root folder and with Node 14 installed execute
+
+```
+npm run test:e2e
+```
+
+End to end tests will be run with supertest. Otherwise you there's a Postman collection created in postman folder. It is possible to import it and test from that place the backend.
 
 ## Assumptions
 
@@ -100,7 +110,7 @@ There's a Postman collection created in postman folder. It is possible to import
 - It would be nice to have a mono repo to share domain models since we are using Typescript end to end.
 - JSON Schema validators could have been used to improve error handling related to invalid requests. I.E using Yup.
 - And extra security step of checking if the wallet exists before storing it in db.
-- Unit and integration testing to be able to test the app without postman. Using jest and supertest respectively.
+- Unit testing could have been used to test business logic in some complex cases.
 
 ## How to use the postman collection
 
