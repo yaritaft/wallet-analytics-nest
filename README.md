@@ -117,3 +117,6 @@ End to end tests will be run with supertest. Otherwise you there's a Postman col
 2. Create your account.
 3. Login. Once you have the token store it in token env variable inside postman.
 4. Once you have that you are able to use all requests in the collection.
+
+
+### CREATE .env file taking the secret from the repo configuration
